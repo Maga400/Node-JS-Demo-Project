@@ -1,13 +1,30 @@
-import express from 'express'
-import carsRoute from "./routes/cars.route.js";
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+
+import carRoute from "./routes/car.route.js";
+
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
 
+app.use(cors());
 app.use(express.json());
 
-app.use("/api/v1/cars",carsRoute);
+app.use("/api/v1/cars", carRoute);
 
-app.listen(PORT, () => {
-  console.log(`✅ Server listening at http://localhost:${PORT}`);
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB connected: " + conn.connection.host);
+  } catch (error) {
+    console.error("Error connecting to MONGODB: " + error.message);
+    process.exit(1);
+  }
+};
+
+app.listen(process.env.PORT, () => {
+  console.log(`✅ Server listening at http://localhost:${process.env.PORT}`);
+  connectDB();
 });
