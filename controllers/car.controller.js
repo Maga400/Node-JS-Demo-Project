@@ -2,7 +2,7 @@ import { Car } from "../models/car.model.js";
 
 export async function getCars(req, res) {
   try {
-    const cars = Car.find();
+    const cars = await Car.find();
     res.status(200).json({
       success: true,
       data: cars,
@@ -16,7 +16,7 @@ export async function getCars(req, res) {
 export async function getCarById(req, res) {
   try {
     const { id } = req.params;
-    const car = Car.findById(id);
+    const car = await Car.findById(id);
 
     if (!car) {
       res
@@ -53,7 +53,7 @@ export async function editCar(req, res) {
   try {
     const { id } = req.params;
     const updatedCar = req.body;
-    const car = Car.findByIdAndUpdate(id, updatedCar, { new: true });
+    const car = await Car.findByIdAndUpdate(id, updatedCar, { new: true });
     res.status(201).json({
       success: true,
       data: car,
@@ -67,7 +67,7 @@ export async function editCar(req, res) {
 export async function deleteCar(req, res) {
   try {
     const { id } = req.params;
-    const car = Car.findByIdAndDelete(id);
+    const car = await Car.findByIdAndDelete(id);
 
     if (!car) {
       res
